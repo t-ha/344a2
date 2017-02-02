@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>PA2 Tim Ha</title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#queryBox").on("input", function () {
+                var query = this.value;
+                $.ajax({
+                    type: 'POST',
+                    url: "getQuerySuggestions.asmx/SearchTrie",
+                    data: '{"prefix":"' + query + '"}',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data.d);
+                        var obj = $.parseJSON(data.d);
+                        var table = "<table>";
+                        $.each(obj, function (index, value) {
+                            console.log(value);
+                            table = table + "<tr><td>" + value + "</td></tr>";
+                        });
+
+                        table = table + "</table>";
+                        $("#suggestions").html(table);
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div id="mainContent">
+        <input id="queryBox" type="text">
+        <div id="suggestions"></div>
+    </div>
+</body>
+</html>
